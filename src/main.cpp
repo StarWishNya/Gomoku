@@ -74,16 +74,12 @@ void runGame(GameConfig& config, NetworkManager& network, UI& ui, bool is_server
     
     // 游戏主循环
     while (!game.isGameOver()) {
-        ui.clearScreen();
-        ui.displayBoard(game.getBoard());
-        ui.displayCurrentPlayer(game.getCurrentPlayer());
-        
         bool my_turn = (game.getCurrentPlayer() == is_black);
         
         if (my_turn) {
-            // 我的回合
+            // 我的回合 - getMoveInput内部会处理显示
             int x, y;
-            if (!ui.getMoveInput(x, y, game.getBoard())) {
+            if (!ui.getMoveInput(x, y, game.getBoard(), game.getCurrentPlayer())) {
                 // 用户选择退出
                 ui.displayInfo("游戏已退出");
                 return;
