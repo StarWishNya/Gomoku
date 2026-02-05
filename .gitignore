@@ -1,0 +1,29 @@
+# 构建目录
+build/
+cmake-build-*/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 可执行文件
+gomoku
+
+# 系统文件
+.DS_Store
+Thumbs.db

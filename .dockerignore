@@ -1,0 +1,11 @@
+.git
+.gitignore
+*.md
+.vscode
+.cursor
+build/
+cmake-build-*/
+*.o
+*.a
+*.so
+*.dylib
