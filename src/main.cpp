@@ -111,6 +111,9 @@ void runGame(GameConfig& config, NetworkManager& network, UI& ui, bool is_server
             }
         } else {
             // 对手的回合
+            ui.clearScreen();
+            ui.displayBoard(game.getBoard());
+            ui.displayCurrentPlayer(game.getCurrentPlayer());
             ui.displayInfo("等待对手落子...");
             
             Message msg;
@@ -124,11 +127,19 @@ void runGame(GameConfig& config, NetworkManager& network, UI& ui, bool is_server
                 int x = move_json["x"];
                 int y = move_json["y"];
                 
+                // 显示对方落子位置（带闪烁效果）
+                bool opponent_is_black = !is_black;  // 对手的颜色与己方相反
+                ui.displayOpponentMove(game.getBoard(), x, y, opponent_is_black);
+                
+                // 执行落子
                 GameResult result = game.makeMove(x, y);
                 
+                // 显示最终结果
+                ui.clearScreen();
+                ui.displayBoard(game.getBoard());
+                ui.displayCurrentPlayer(game.getCurrentPlayer());
+                
                 if (result != GameResult::NONE) {
-                    ui.clearScreen();
-                    ui.displayBoard(game.getBoard());
                     ui.displayResult(result);
                     break;
                 }

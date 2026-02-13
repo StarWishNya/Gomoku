@@ -40,6 +40,9 @@ public:
     // 显示带光标的棋盘
     void displayBoardWithCursor(const Board& board, int cx, int cy, bool highlight);
     
+    // 显示对方落子（带闪烁效果）
+    void displayOpponentMove(const Board& board, int x, int y, bool opponent_is_black);
+    
     // 显示当前玩家
     void displayCurrentPlayer(bool is_black);
     

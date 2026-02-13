@@ -177,6 +177,88 @@ void UI::displayCurrentPlayer(bool is_black) {
     std::cout << "当前玩家: " << (is_black ? "黑棋 (X)" : "白棋 (O)") << std::endl;
 }
 
+void UI::displayOpponentMove(const Board& board, int x, int y, bool opponent_is_black) {
+    // 显示对方落子位置，带闪烁效果
+    const int flash_count = 3;  // 闪烁3次
+    const auto flash_interval = std::chrono::milliseconds(300);
+    
+    int size = board.getSize();
+    char opponent_stone = opponent_is_black ? 'X' : 'O';
+    
+    for (int i = 0; i < flash_count; ++i) {
+        clearScreen();
+        
+        // 打印列号
+        std::cout << "\n   ";
+        for (int j = 0; j < size; ++j) {
+            std::cout << std::setw(3) << (j + 1);
+        }
+        std::cout << "\n";
+        
+        // 打印棋盘，高亮显示对方落子位置
+        for (int py = 0; py < size; ++py) {
+            std::cout << std::setw(2) << (py + 1) << " ";
+            for (int px = 0; px < size; ++px) {
+                bool is_opponent_move = (px == x && py == y);
+                CellState cell = board.getCell(px, py);
+                char stone = getStoneChar(cell);
+                
+                if (is_opponent_move) {
+                    // 高亮显示对方落子位置
+                    std::cout << ANSI_BOLD << ANSI_REVERSE;
+                    // 如果位置为空，显示对方即将落子的棋子
+                    if (cell == CellState::EMPTY) {
+                        std::cout << "[" << opponent_stone << "]";
+                    } else {
+                        std::cout << " " << stone << " ";
+                    }
+                    std::cout << ANSI_RESET;
+                } else {
+                    std::cout << " " << stone << " ";
+                }
+            }
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+        
+        std::cout << "对手落子: " << (opponent_is_black ? "黑棋 (X)" : "白棋 (O)") 
+                  << " 位置: (" << (x + 1) << ", " << (y + 1) << ")" << std::endl;
+        std::this_thread::sleep_for(flash_interval);
+        
+        clearScreen();
+        
+        // 打印列号
+        std::cout << "\n   ";
+        for (int j = 0; j < size; ++j) {
+            std::cout << std::setw(3) << (j + 1);
+        }
+        std::cout << "\n";
+        
+        // 打印棋盘，正常显示
+        for (int py = 0; py < size; ++py) {
+            std::cout << std::setw(2) << (py + 1) << " ";
+            for (int px = 0; px < size; ++px) {
+                bool is_opponent_move = (px == x && py == y);
+                CellState cell = board.getCell(px, py);
+                char stone = getStoneChar(cell);
+                
+                if (is_opponent_move && cell == CellState::EMPTY) {
+                    // 显示对方即将落子的棋子（不高亮）
+                    std::cout << "[" << opponent_stone << "]";
+                } else {
+                    std::cout << " " << stone << " ";
+                }
+            }
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+        
+        std::cout << "对手落子: " << (opponent_is_black ? "黑棋 (X)" : "白棋 (O)") 
+                  << " 位置: (" << (x + 1) << ", " << (y + 1) << ")" << std::endl;
+        std::this_thread::sleep_for(flash_interval);
+    }
+}
+
 void UI::displayResult(GameResult result) {
     std::cout << "\n========================================" << std::endl;
     switch (result) {
